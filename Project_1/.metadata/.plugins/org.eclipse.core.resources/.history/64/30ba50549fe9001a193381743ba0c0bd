@@ -1,0 +1,76 @@
+package TheMain;
+
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.*;
+
+public class Main extends JFrame implements KeyListener{
+	
+	int x = 0, y = 0;
+	Container c = new Container();
+	
+	ImageIcon plr = new ImageIcon("H:\\Project Work 1\\Project_1\\ProjectWork1\\TheMain\\Player.png");
+	private JLabel player = new JLabel();
+	
+	Main(){
+		setBounds(100, 100, 500, 500);
+		setVisible(true);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setResizable(false);
+		addKeyListener(this);
+		
+		initPaint();
+	}
+	
+	public void initPaint() {
+		c = getContentPane();
+		c.setLayout(null);
+		c.setBackground(Color.red);
+		
+		player.setBounds(10, 10, 100, 200);
+		player.setIcon(plr);
+		player.setVisible(true);
+		c.add(player);
+		repaint();
+	}
+	
+	public void keyTyped(KeyEvent e) {
+	    }
+	    
+	public void keyPressed(KeyEvent e) {
+
+		int key = e.getKeyCode();
+		
+		if(key == KeyEvent.VK_A) {
+			x = x-1;
+		}
+		else if(key == KeyEvent.VK_D) {
+			x = x+1;
+		}
+		else if(key == KeyEvent.VK_W) {
+			y = y-1;
+		}
+		else if(key == KeyEvent.VK_S) {
+			y = y+1;
+		}
+		Refresh();
+	}
+
+	public void keyReleased(KeyEvent e) {
+	    }
+
+
+	public void Refresh() {
+		
+		player.setBounds(x, y, 100, 200);
+		repaint();
+	}
+	
+	public static void main(String[] args) {
+		Main frm = new Main();
+		
+		System.out.print("Hello World");
+	}	
+}

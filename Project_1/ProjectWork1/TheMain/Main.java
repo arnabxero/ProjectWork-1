@@ -15,7 +15,7 @@ public class Main extends JFrame implements KeyListener{
 	
 	ImageIcon plr = new ImageIcon("H:\\Project Work 1\\Project_1\\ProjectWork1\\TheMain\\Player.png");
 	private JLabel player = new JLabel();
-	ImageIcon Bc = new ImageIcon("H:\\Project Work 1\\Project_1\\ProjectWork1\\TheMain\\JungleBack.png");
+	ImageIcon Bc = new ImageIcon("H:\\Project Work 1\\Project_1\\ProjectWork1\\TheMain\\MainMenu.png");
 	private JLabel background = new JLabel();
 	
 	Main(){

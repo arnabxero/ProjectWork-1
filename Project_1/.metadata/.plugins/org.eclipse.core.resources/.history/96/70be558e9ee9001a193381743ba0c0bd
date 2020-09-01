@@ -1,0 +1,85 @@
+package TheMain;
+
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.*;
+
+public class Main extends JFrame implements KeyListener{
+	
+	int x = 100, y = 100;
+	Container c = new Container();
+	
+	ImageIcon plr = new ImageIcon("H:\\Project Work 1\\Project_1\\ProjectWork1\\TheMain\\Player.png");
+	private JLabel player = new JLabel();
+	
+	Main(){
+		setBounds(100, 100, 500, 500);
+		setVisible(false);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setResizable(false);
+		
+		initPaint();
+	}
+	
+	public void initPaint() {
+		c = getContentPane();
+		c.setLayout(null);
+		c.setBackground(Color.red);
+		
+		player.setBounds(10, 10, 100, 200);
+		player.setIcon(plr);
+		player.setVisible(true);
+		c.add(player);
+		repaint();
+	}
+	
+	  @Override
+	    public void keyTyped(KeyEvent e) {
+
+	        if (e.getKeyCode() == KeyEvent.VK_A) {
+	            System.out.println("Right key typed");
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+	            System.out.println("Left key typed");
+	        }
+
+	    }
+
+	    @Override
+	    public void keyPressed(KeyEvent e) {
+
+	        if (e.getKeyCode() == KeyEvent.VK_A) {
+	            System.out.println("Right key pressed");
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+	            System.out.println("Left key pressed");
+	        }
+
+	    }
+
+	    @Override
+	    public void keyReleased(KeyEvent e) {
+	        if (e.getKeyCode() == KeyEvent.VK_A) {
+	            System.out.println("Right key Released");
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+	            System.out.println("Left key Released");
+	        }
+	    }
+
+
+	public void Refresh() {
+		
+		player.setBounds(x, y, 100, 200);
+		c.removeAll();
+		repaint();
+	}
+	
+	public static void main(String[] args) {
+		Main frm = new Main();
+		
+		System.out.print("Hello World");
+	}	
+}

@@ -1,0 +1,42 @@
+package TheMain;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.*;
+
+public class Main extends JFrame implements KeyListener{
+	
+	
+	
+	Main(){
+		setBounds(100, 100, 200, 200);
+		setVisible(true);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setResizable(false);
+	}
+	
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public static void main(String[] args) {
+		Main frm = new Main();
+		
+		System.out.print("Hello World");
+	}
+
+	
+}

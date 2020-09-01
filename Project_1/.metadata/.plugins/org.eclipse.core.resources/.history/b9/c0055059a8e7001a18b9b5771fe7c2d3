@@ -1,0 +1,19 @@
+package TheMain;
+
+import javax.swing.*;
+
+public class Main extends JFrame {
+	
+	Main(){
+		setBounds(100, 100, 200, 200);
+		setVisible(true);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setResizable(false);
+	}
+	public static void main(String[] args) {
+		Main frm = new Main();
+		
+		System.out.print("Hello World");
+	}
+
+}
