@@ -34,9 +34,12 @@ public class Main extends JFrame implements KeyListener{
 	int side = 0;
 	int time = 180;
 	int key = -1;
+	boolean pressing = false;
 	
-	ImageIcon plr = new ImageIcon("player.png");
-	ImageIcon plr2 = new ImageIcon("player2.png");
+	ImageIcon plr = new ImageIcon("playerr.png");
+	ImageIcon plr2 = new ImageIcon("playerl.png");
+	ImageIcon plrlp = new ImageIcon("playerlp.png");
+	ImageIcon plrrp = new ImageIcon("playerrp.png");
 	
 	JLabel player = new JLabel();
 	JLabel timelabel = new JLabel();
@@ -245,6 +248,8 @@ public class Main extends JFrame implements KeyListener{
 		mm.setVisible(true);
 		c.add(mm);
 		repaint();
+		
+		RefreshLv1();
 	}
 	
 	public void keyTyped(KeyEvent e) {
@@ -282,38 +287,89 @@ public class Main extends JFrame implements KeyListener{
 				X_Val = X_Val-Const;
 			}
 		}
+		else if(keycode == KeyEvent.VK_Q) {
+			key = 5;
+			pressing = true;
+			System.out.println("Q = "+key);
+		}
 		System.out.println("Y = "+Y_Val+"-----X = "+X_Val);
 		RefreshLv1();
 	}
 
 	public void keyReleased(KeyEvent e) {
-	    }
+		int keycode = e.getKeyCode();
+		
+		if(keycode == KeyEvent.VK_Q) {
+			key = 5;
+			pressing = false;
+			RefreshLv1();
+		}
+	}
 	
 	public void PhysicLv1() {
 		if(key==1) {
 			Y_Val = Y_Val-Const;
+			
+			if(X_Val>25 && X_Val<250) {
+				if(Y_Val<815) {
+					Y_Val = Y_Val+Const;
+				}
+			}
 		}
 		else if(key==2) {
 			Y_Val = Y_Val+Const;
 		}
 		else if(key==3) {
 			X_Val = X_Val-Const;
+			
+			if(Y_Val>=0 && Y_Val<815) {
+				if(X_Val>25 && X_Val<250) {
+					X_Val = X_Val+Const;
+				}
+			}
 		}
 		else if(key==4) {
 			X_Val = X_Val+Const;
-		}
-		else {
-			
+			 
+			if(Y_Val>=0 && Y_Val<815) {
+				if(X_Val>25 && X_Val<250) {
+					X_Val = X_Val-Const;
+				}
+			}
 		}
 	}
 	
 	public void RefreshLv1() {
 		c.removeAll();
+		
 		PhysicLv1();
 		
-		if(side==1)
-			player.setIcon(plr);
-		else player.setIcon(plr2);
+		if(key<5) {
+			if(side==0) {
+				player.setIcon(plr2);
+			}
+			else if(side==1) {
+				player.setIcon(plr);
+			}
+		}
+		else if(key==5) {
+			if(side==0) {
+				if(pressing==true) {
+					player.setIcon(plrlp);
+				}
+				else if(pressing==false) {
+					player.setIcon(plr2);
+				}
+			}
+			else if(side==1) {
+				if(pressing==true) {
+					player.setIcon(plrrp);
+				}
+				else if(pressing==false) {
+					player.setIcon(plr);
+				}
+			}
+		}
 		
 		player.setBounds(Y_Val, X_Val, 100, 120);
 		
@@ -327,7 +383,7 @@ public class Main extends JFrame implements KeyListener{
 		mm.setVisible(true);
 		c.add(mm);
 		
-		repaint();
+		repaint();	
 	}
 	
 	public static void main(String[] args) {
