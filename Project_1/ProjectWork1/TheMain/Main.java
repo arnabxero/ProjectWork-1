@@ -39,12 +39,11 @@ public class Main extends JFrame implements KeyListener{
 	int blued = 0;
 	int greend = 0;
 	int redd = 0;
-	int LevelSelect = 1;
-	int LastLevel = -1;
+	int LastLevel = 1;
 	int score = 0;
 	
 	boolean pressing = false;
-	boolean enemy1killed = false, enemy2killed = false;
+	boolean enemy1killed = false, enemy2killed = false, enemy3killed = false, enemy4killed = false, enemy5killed = false;
 	boolean d1 = false, d2 = false, d3 = false;
 	
 	ImageIcon plr = new ImageIcon("playerr.png");
@@ -70,6 +69,9 @@ public class Main extends JFrame implements KeyListener{
 	ImageIcon plrc1 = new ImageIcon("playerc1.png");
 	ImageIcon plrc2 = new ImageIcon("playerc2.png");
 	ImageIcon plrcra = new ImageIcon("playercra.png");
+	ImageIcon plrwr = new ImageIcon("playerwr.png");
+	ImageIcon plrwl = new ImageIcon("playerwl.png");
+	ImageIcon enemy1ar = new ImageIcon("enemy1ar.png");
 	
 	JLabel scc = new JLabel();
 	JLabel exit = new JLabel();
@@ -82,7 +84,9 @@ public class Main extends JFrame implements KeyListener{
 	JLabel enemy1 = new JLabel();
 	JLabel lifelabel = new JLabel();
 	JLabel enemy2 = new JLabel();
-
+	JLabel enemy3 = new JLabel();
+	JLabel enemy4 = new JLabel();
+	JLabel enemy5 = new JLabel();
 	
 	Font tm = new Font("Calibre", Font.BOLD, 20);
 	Font lf = new Font("Calibre", Font.BOLD, 50);
@@ -120,8 +124,8 @@ public class Main extends JFrame implements KeyListener{
 		c.add(cont);	
 		cont.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Level1();
-				//CallContinue();
+				//Level1();
+				CallContinue();
 			}
 		});	
 		
@@ -140,8 +144,8 @@ public class Main extends JFrame implements KeyListener{
 				
 				if(cnfrm==JOptionPane.YES_OPTION)
 					Level1();
-					//CallNewGame();
-				else CallContinue();
+					
+				else MainMenu();
 			}
 		});	
 		
@@ -186,10 +190,28 @@ public class Main extends JFrame implements KeyListener{
 	}
 	
 	public void CallContinue() {
-		
+		if(LastLevel==1) {
+			life = 3;
+			time = 180;
+			score = 0;
+			Level1();
+		}
+		else if(LastLevel==2) {
+			
+		}
+		else if(LastLevel==3) {
+			
+		}
+		else if(LastLevel==4) {
+			
+		}
 	}
 	public void CallNewGame() {
+		life = 3;
+		time = 180;
+		score = 0;
 		
+		Level1();
 	}
 	public void CallLevels() {
 		c.removeAll();
@@ -366,6 +388,7 @@ public class Main extends JFrame implements KeyListener{
 	
 	public void CallLv1Win() {
 		c.removeAll();
+		System.out.println(""+score);
 		
 		JLabel lifebonus = new JLabel();
 		lifebonus.setText(""+life+"x1000 = "+(life*1000));
@@ -374,21 +397,21 @@ public class Main extends JFrame implements KeyListener{
 		c.add(lifebonus);
 		
 		JLabel enemyscore = new JLabel();
-		enemyscore.setBounds(630, 290, 400, 100);
-		enemyscore.setText("2x1000 = 2000");
+		enemyscore.setBounds(630, 345, 400, 100);
+		enemyscore.setText("5x1000 = 5000");
 		enemyscore.setFont(scf);
 		c.add(enemyscore);
 		
 		JLabel dscore = new JLabel();
-		dscore.setBounds(630, 345, 400, 100);
-		dscore.setText("3x1000 = 3000");
+		dscore.setBounds(630, 290, 400, 100);
+		dscore.setText(""+((score-5000)/1000)+"x1000 = "+((score-5000)));
 		dscore.setFont(scf);
 		c.add(dscore);
 		
-		int score = (life*1000)+2000+3000;
+		int scorel = (life*1000)+score;
 		JLabel scorelabel = new JLabel();
 		scorelabel.setBounds(630, 410, 400, 100);
-		scorelabel.setText("                 "+score);
+		scorelabel.setText("                 "+scorel);
 		scorelabel.setFont(scf);
 		c.add(scorelabel);
 		
@@ -465,10 +488,74 @@ public class Main extends JFrame implements KeyListener{
 	
 	public void RefreshLv1Timer() {
 		
+		enemy1.setBounds(470, 25, 120, 120);
+		enemy3.setBounds(720, 270, 120, 120);
+		enemy5.setBounds(160, 525, 120, 120);
+		
+		if(enemy2killed==false) {
+			enemy2.setIcon(enemy2live);
+		}
+		else {
+			enemy2.setIcon(enemy2fk);
+		}
+		
+		if(enemy3killed==true) {
+			enemy3.setBounds(720, 290, 120, 120);
+		}
+		
+		if(enemy4killed==false) {
+			enemy4.setIcon(enemy2live);
+		}
+		else {
+			enemy4.setIcon(enemy2fk);
+		}
+		
 		if(time2%2==0) {
-			
-			enemy1.setBounds(470, 25, 120, 120);
-			
+			if(enemy5killed==false) {
+				if(Y_Val>=90 && Y_Val<190 && X_Val>=460 && X_Val<=540) {
+					enemy5.setBounds(120, 525, 120, 120);
+					enemy5.setIcon(enemy1al);
+				}
+				else{
+					enemy5.setIcon(enemyr);
+				}
+			}
+			else {
+				enemy5.setIcon(enemy1fk);
+			}
+		}
+		else {
+			if(enemy5killed==false) {		
+				enemy5.setIcon(enemy);
+			}
+			else {
+				enemy5.setIcon(enemy1fk);
+			}
+		}
+		
+		if(time2%2==0) {
+			if(enemy3killed==false) {
+				if(Y_Val<800 && X_Val>=240 && X_Val<=280) {
+					enemy3.setIcon(enemy1ar);
+				}
+				else{
+					enemy3.setIcon(enemy);
+				}
+			}
+			else {
+				enemy3.setIcon(enemy1fk);
+			}
+		}
+		else {
+			if(enemy3killed==false) {		
+				enemy3.setIcon(enemyr);
+			}
+			else {
+				enemy3.setIcon(enemy1fk);
+			}
+		}
+		
+		if(time2%2==0) {
 			diamond1.setIcon(green);
 			diamond2.setIcon(redr);
 			diamond3.setIcon(blue);
@@ -483,13 +570,11 @@ public class Main extends JFrame implements KeyListener{
 				}
 			}
 			else {
+				enemy1.setBounds(470, 45, 120, 120);
 				enemy1.setIcon(enemy1fk);
 			}
 		}
-		else {
-			
-			enemy1.setBounds(470, 25, 120, 120);
-			
+		else {			
 			diamond1.setIcon(greenr);
 			diamond2.setIcon(red);
 			diamond3.setIcon(bluer);
@@ -503,6 +588,7 @@ public class Main extends JFrame implements KeyListener{
 				}
 			}
 			else {
+				enemy1.setBounds(470, 45, 120, 120);
 				enemy1.setIcon(enemy1fk);
 			}	
 		}
@@ -515,12 +601,36 @@ public class Main extends JFrame implements KeyListener{
 			player.setIcon(plrc2);
 		}
 	}
+	
+	public void SetPlayerWalk() {
+		if(time2%2==0) {
+			if(side==1) {
+				player.setIcon(plr);
+			}
+			else {
+				player.setIcon(plr2);
+			}
+		}
+		else {
+			if(side==1) {
+				player.setIcon(plrwr);
+			}
+			else {
+				player.setIcon(plrwl);
+			}
+		}
+	}
+	
 	public void RefreshLv1() {
 		c.removeAll();
 		
-		if(Y_Val>1000 && X_Val>500 && d1==true && d2==true && d3==true) {
+		if(life>=0 && time>0 && Y_Val>1000 && X_Val>500 && score>=7000) {
 			CallLv1Win();
 		}
+		else if((life<0 || time<0) && score<8000) {
+			//CallLv1Fail();
+		}
+		
 		PhysicLv1();
 		if(d1==true && d2==true && d3==true) {
 			exit.setIcon(exit1);
@@ -535,23 +645,19 @@ public class Main extends JFrame implements KeyListener{
 		if(key<5) {
 			if(side==0) {
 				if((X_Val>=20 && X_Val<=25 && Y_Val>=0 && Y_Val<=760) || (Y_Val>=980 && Y_Val<=1030 && X_Val>=150 && X_Val<=155) || (Y_Val>=180 && Y_Val<=960 && X_Val>=265 && X_Val<=270) || (Y_Val>=0 && Y_Val<=1020 && X_Val>=525 && X_Val<=540)) {
-					player.setIcon(plr2);
+					SetPlayerWalk();
 				}
 				else {
 					SetPlayerClimb();
-					//player.setIcon(plrc1);
 				}
-				//player.setIcon(plr2);
 			}
 			else if(side==1) {
 				if((X_Val>=20 && X_Val<=25 && Y_Val>=0 && Y_Val<=760) || (Y_Val>=980 && Y_Val<=1030 && X_Val>=150 && X_Val<=155) || (Y_Val>=180 && Y_Val<=960 && X_Val>=265 && X_Val<=270) || (Y_Val>=0 && Y_Val<=1020 && X_Val>=525 && X_Val<=540)) {
-					player.setIcon(plr);
+					SetPlayerWalk();
 				}
 				else {
 					SetPlayerClimb();
-					//player.setIcon(plrc2);
 				}
-				//player.setIcon(plr);
 			}
 		}
 		else if(key==5) {
@@ -563,17 +669,14 @@ public class Main extends JFrame implements KeyListener{
 					else {
 						player.setIcon(plrcla);
 					}
-					//player.setIcon(plrlp);
 				}
 				else if(pressing==false) {
 					if((X_Val>=20 && X_Val<=25 && Y_Val>=0 && Y_Val<=760) || (Y_Val>=980 && Y_Val<=1030 && X_Val>=150 && X_Val<=155) || (Y_Val>=180 && Y_Val<=960 && X_Val>=265 && X_Val<=270) || (Y_Val>=0 && Y_Val<=1020 && X_Val>=525 && X_Val<=540)) {
-						player.setIcon(plr2);
+						SetPlayerWalk();
 					}
 					else {
 						SetPlayerClimb();
-						//player.setIcon(plrc1);
 					}
-					//player.setIcon(plr2);
 				}
 			}
 			else if(side==1) {
@@ -584,41 +687,30 @@ public class Main extends JFrame implements KeyListener{
 					else {
 						player.setIcon(plrcra);
 					}
-					//player.setIcon(plrrp);
 				}
 				else if(pressing==false) {
 					if((X_Val>=20 && X_Val<=25 && Y_Val>=0 && Y_Val<=760) || (Y_Val>=980 && Y_Val<=1030 && X_Val>=150 && X_Val<=155) || (Y_Val>=180 && Y_Val<=960 && X_Val>=265 && X_Val<=270) || (Y_Val>=0 && Y_Val<=1020 && X_Val>=525 && X_Val<=540)) {
-						player.setIcon(plr);
+						SetPlayerWalk();
 					}
 					else {
 						SetPlayerClimb();
-						//player.setIcon(plrc2);
 					}
-					//player.setIcon(plr);
 				}
 			}
 		}
 		
-		if(enemy1killed==true && score<1000) {
-			score = 1000;
-			scc.setText(""+score);
-		}
-		if(enemy2killed==true && score<2000) {
-			score = 2000;
-			scc.setText(""+score);
-		}		
-		
+
 		scc.setBounds(1160, 55, 300, 70);
 		scc.setFont(scf);
 		
-		enemy2.setIcon(enemy2live);
 		enemy2.setBounds(820, 20, 80, 80);
+		enemy4.setBounds(400, 270, 80, 80);
 		
 		diamond1.setBounds(1020, 170, 120, 120);
 		diamond2.setBounds(220, 280, 120, 120);
 		diamond3.setBounds(530, 550, 120, 120);
 		
-		if(Y_Val>975 && X_Val>110 && d1==false) {
+		if(Y_Val>975 && Y_Val<=1025 && X_Val>110 && X_Val<=160 && d1==false) {
 			d1 = true;
 			score = score+1000;
 		}
@@ -643,6 +735,8 @@ public class Main extends JFrame implements KeyListener{
 		
 		if(Y_Val>=410 && enemy1killed==false && pressing==true) {
 			enemy1killed = true;
+			score = score+1000;
+			scc.setText(""+score);
 		}
 		
 		if(Y_Val>420 && enemy1killed==false && pressing==false) {
@@ -654,10 +748,10 @@ public class Main extends JFrame implements KeyListener{
 		
 		if(Y_Val>=760 && enemy2killed==false && pressing==true) {
 			enemy2.setIcon(enemy2fk);
-			c.add(enemy2);
 			enemy2killed = true;
+			score = score+1000;
+			scc.setText(""+score);
 		}
-		
 		if(Y_Val>770 && enemy2killed==false && pressing==false) {
 			life = life-1;
 			lifelabel.setText(""+life);
@@ -665,15 +759,48 @@ public class Main extends JFrame implements KeyListener{
 			X_Val = 20;
 		}
 		
-		if(enemy2killed==false) {
-			c.add(enemy2);
+		
+		if(Y_Val>420 && Y_Val<460 &&  X_Val>=240 && X_Val<=280 && enemy4killed==false && pressing==false) {
+			life = life-1;
+			lifelabel.setText(""+life);
+			Y_Val = 5;
+			X_Val = 20;
 		}
-		else {
-			enemy2.setIcon(enemy2fk);
-			enemy2.setBounds(820, 20, 80, 80);
-			c.add(enemy2);
+		if(Y_Val>=420 && Y_Val<470 && X_Val>=240 && X_Val<=280 && enemy4killed==false && pressing==true) {
+			enemy4.setIcon(enemy2fk);
+			enemy4killed = true;
+			score = score+1000;
+			scc.setText(""+score);
+		}	
+		
+		if(enemy3killed==false && Y_Val>=680 && Y_Val<=790 && X_Val>=240 && X_Val<=280 && pressing==true) {
+			enemy3killed = true;
+			score = score+1000;
+			scc.setText(""+score);
+		}
+		if(enemy3killed==false && X_Val>=240 && X_Val<=280 && Y_Val>690 && Y_Val<780) {
+			life = life-1;
+			lifelabel.setText(""+life);
+			Y_Val = 5;
+			X_Val = 20;
 		}
 		
+		if(enemy5killed==false && Y_Val>=90 && Y_Val<190 && X_Val>=460 && X_Val<=540 && pressing==true) {
+			enemy5killed = true;
+			score = score+1000;
+			scc.setText(""+score);
+		}
+		if(enemy5killed==false && Y_Val>100 && Y_Val<190 && X_Val>=460 && X_Val<=540) {
+			life = life-1;
+			lifelabel.setText(""+life);
+			Y_Val = 5;
+			X_Val = 20;
+		}
+		
+		c.add(enemy5);
+		c.add(enemy4);
+		c.add(enemy3);
+		c.add(enemy2);
 		c.add(scc);
 		c.add(enemy1);
 		c.add(lifelabel);
