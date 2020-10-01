@@ -14,6 +14,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.PrintStream;
+
 import javax.swing.*;
 import javax.swing.Timer;
 
@@ -28,6 +35,7 @@ public class Main extends JFrame implements KeyListener{
 	Image curImg = tools.getImage("cur.png");
 	Image curImg2 = tools.getImage("cur2.png");
 	
+	int highscore = 0;
 	int X_Val = 20;
 	int Y_Val = 0;
 	int Const = 5;
@@ -41,10 +49,25 @@ public class Main extends JFrame implements KeyListener{
 	int redd = 0;
 	int LastLevel = 1;
 	int score = 0;
+	int levelselect = -1;
 	
 	boolean pressing = false;
 	boolean enemy1killed = false, enemy2killed = false, enemy3killed = false, enemy4killed = false, enemy5killed = false;
 	boolean d1 = false, d2 = false, d3 = false;
+	
+	///////////////////////Level2stuff/////////////////////////////////
+	boolean en1k = false, en2k = false, en3k = false, en4k = false;
+	boolean dm1 = false, dm2 = false, dm3 = false;
+	
+	JLabel en1l2 = new JLabel();
+	JLabel en2l2 = new JLabel();
+	JLabel en3l2 = new JLabel();
+	JLabel en4l2 = new JLabel();
+	JLabel dm1l2 = new JLabel();
+	JLabel dm2l2 = new JLabel();
+	JLabel dm3l2 = new JLabel();
+	JLabel herol2 = new JLabel();
+	///////////////////////////////////////////////////////////////////
 	
 	ImageIcon plr = new ImageIcon("playerr.png");
 	ImageIcon plr2 = new ImageIcon("playerl.png");
@@ -87,10 +110,17 @@ public class Main extends JFrame implements KeyListener{
 	JLabel enemy3 = new JLabel();
 	JLabel enemy4 = new JLabel();
 	JLabel enemy5 = new JLabel();
+	JLabel dimond1got = new JLabel();
+	JLabel dimond2got = new JLabel();
+	JLabel dimond3got = new JLabel();
+	
+	
 	
 	Font tm = new Font("Calibre", Font.BOLD, 20);
 	Font lf = new Font("Calibre", Font.BOLD, 50);
 	Font scf = new Font("Calibre", Font.BOLD, 30);
+	
+	
 	
 	Main(){
 		setBounds(0, 0, BoundX, BoundY);
@@ -102,8 +132,39 @@ public class Main extends JFrame implements KeyListener{
 		setCursor(tools.createCustomCursor(curImg, new Point(0, 0), "customCursor"));
 		
 		initPaint();
+		try {
+			readHighScore();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
+	public void writeHighScore() {
+
+		String text = Integer.toString(score);
+		
+		try (PrintStream out = new PrintStream(new FileOutputStream("highscore.txt"))) {
+			out.print(text);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readHighScore() throws Exception {
+		
+		File file = new File("highscore.txt");
+
+		BufferedReader br = new BufferedReader(new FileReader(file));
+
+		String st = br.readLine();
+		
+		highscore = Integer.parseInt(st);
+		
+		System.out.println(""+highscore);
+		
+		br.close();
+	}
+ 
 	public void initPaint() {
 		c = getContentPane();
 		c.setLayout(null);
@@ -111,6 +172,15 @@ public class Main extends JFrame implements KeyListener{
 		
 		
 		MainMenu();
+		
+		Timer t2 = new Timer(200, new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				time2--;
+				RefreshLv1Timer();
+			}
+		});
+		t2.start();
 	}
 	
 	public void MainMenu() {
@@ -124,7 +194,7 @@ public class Main extends JFrame implements KeyListener{
 		c.add(cont);	
 		cont.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Level1();
+				levelselect = 1;
 				CallContinue();
 			}
 		});	
@@ -142,8 +212,10 @@ public class Main extends JFrame implements KeyListener{
 						+ "\n= All Your Previous Progress Will Be Deleted!    ="
 						+ "\n=======================================", "Warning!", JOptionPane.YES_NO_CANCEL_OPTION);
 				
-				if(cnfrm==JOptionPane.YES_OPTION)
+				if(cnfrm==JOptionPane.YES_OPTION) {
+					levelselect = 1;
 					Level1();
+				}
 					
 				else MainMenu();
 			}
@@ -188,13 +260,27 @@ public class Main extends JFrame implements KeyListener{
 		
 		repaint();
 	}
+	public void timerstartstop(int n) {
+		
+		Timer t = new Timer(1000, new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				time--;
+				RefreshLv1Timer();
+				
+				if(time>=0)
+					timelabel.setText(""+(time / 60)+":"+(time % 60));
+			}
+		});
+		if(n==0) {
+			t.stop();
+		}
+		else t.start();
+	}
 	
 	public void CallContinue() {
 		if(LastLevel==1) {
-			life = 3;
-			time = 180;
-			score = 0;
-			Level1();
+			CallNewGame();
 		}
 		else if(LastLevel==2) {
 			
@@ -210,7 +296,6 @@ public class Main extends JFrame implements KeyListener{
 		life = 3;
 		time = 180;
 		score = 0;
-		
 		Level1();
 	}
 	public void CallLevels() {
@@ -224,7 +309,8 @@ public class Main extends JFrame implements KeyListener{
 		c.add(lv1);	
 		lv1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					Level1();
+				levelselect = 1;
+				Level1();
 			}
 		});	
 		JButton lv2 = new JButton();
@@ -235,7 +321,7 @@ public class Main extends JFrame implements KeyListener{
 		c.add(lv2);	
 		lv2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					
+				Level2();
 			}
 		});	
 		JButton lv3 = new JButton();
@@ -281,47 +367,26 @@ public class Main extends JFrame implements KeyListener{
 		c.add(mm);
 		repaint();
 	}
-	
-	public void Level1() {
+	public void Level2() {
 		c.removeAll();
 		
-		player.setIcon(plr);
-		player.setBounds(Y_Val, X_Val, 100, 120);
-		c.add(player);
-		timelabel.setText("NULL");
-		timelabel.setBounds(1200, 104, 200, 100);
-		timelabel.setFont(tm);
-		timelabel.setVisible(true);
-		c.add(timelabel);
-		lifelabel.setText(""+life);
-		lifelabel.setBounds(1230, 213, 200, 100);
-		lifelabel.setFont(lf);
-		c.add(lifelabel);
+		levelselect = 2;
+		pressing = false;
+		en1k = false;
+		en2k = false;
+		en3k = false;
+		en4k = false;
+		dm1 = false;
+		dm2 = false;
+		dm3 = false;
+		time = 180;
+		X_Val = 20;
+		Y_Val = 0;
+		//time2 = 99999;
+		life = 3;
+		score = 0;
 		
-		time2 = 9999;
-		
-		Timer t2 = new Timer(200, new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				time2--;
-				RefreshLv1Timer();
-			}
-		});
-		t2.start();
-		
-		Timer t = new Timer(1000, new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				time--;
-				RefreshLv1Timer();
-				
-				if(time>=0)
-					timelabel.setText(""+(time / 60)+":"+(time % 60));
-			}
-		});
-		t.start();
-		
-		ImageIcon bc = new ImageIcon("level1.png");
+		ImageIcon bc = new ImageIcon("level2.png");
 		JLabel mm = new JLabel();
 		mm.setBounds(0, 0, 1300, 700);
 		mm.setIcon(bc);
@@ -329,7 +394,187 @@ public class Main extends JFrame implements KeyListener{
 		c.add(mm);
 		repaint();
 		
-		RefreshLv1();
+	}
+	public void PhysicsLv2() {
+		if(key==1) {
+			Y_Val = Y_Val-Const;
+			
+			if(X_Val>85 && Y_Val<540) {
+				if(Y_Val<135) {
+					Y_Val = Y_Val+Const;
+				}
+			}
+			if(X_Val>=0 && X_Val<=490) {
+				if(Y_Val<590 && Y_Val>465) {
+					Y_Val = Y_Val+Const;
+				}
+			}
+			if(X_Val>=45 && X_Val<=270) {
+				if(Y_Val<890 && Y_Val>790) {
+					Y_Val = Y_Val+Const;
+				}
+			}
+			
+		}
+		else if(key==2) {
+			Y_Val = Y_Val+Const;
+			if(X_Val>=0 && X_Val<=130) {
+				if(Y_Val>240 && Y_Val<=515) {
+					Y_Val = Y_Val-Const;
+				}
+			}
+			if(X_Val>=0 && X_Val<=150) {
+				if(Y_Val>375 && Y_Val<=515) {
+					Y_Val = Y_Val-Const;
+				}
+			}
+			if(X_Val>150 && X_Val<490) {
+				if(Y_Val>235 && Y_Val<515) {
+					Y_Val = Y_Val-Const;
+				}
+			}
+			if(X_Val>50 && X_Val<495) {
+				if(Y_Val>680 && Y_Val<785) {
+					Y_Val = Y_Val-Const;
+				}
+			}
+			if(X_Val>=495 && X_Val<540) {
+				if(Y_Val>820 && Y_Val<950) {
+					Y_Val = Y_Val-Const;
+				}
+			}
+			
+		}
+		else if(key==3) {
+			X_Val = X_Val-Const;
+			
+			if(Y_Val>=250 && Y_Val<=515) {
+				if(X_Val<=130) {
+					X_Val = X_Val+Const;
+				}
+			}
+			if(Y_Val>=235 && Y_Val<=585) {
+				if(X_Val<490 && X_Val>280) {
+					X_Val = X_Val+Const;
+				}
+			}
+			if(Y_Val>=680 && Y_Val<=820) {
+				if(X_Val<=495 && X_Val>=350) {
+					X_Val = X_Val+Const;
+				}
+			}
+		
+		}
+		else if(key==4) {
+			X_Val = X_Val+Const;
+			
+			if(Y_Val>=0 && Y_Val<=130) {
+				if(X_Val>85) {
+					X_Val = X_Val - Const;
+				}
+			}
+			if(Y_Val>=240 && Y_Val<=515) {
+				if(X_Val>150 && X_Val<360) {
+					X_Val = X_Val-Const;
+				}
+			}
+			if(Y_Val>685 && Y_Val<890) {
+				if(X_Val>45 && X_Val<220) {
+					X_Val = X_Val-Const;
+				}
+			}
+			if(Y_Val>=890 && Y_Val<=1025) {
+				if(X_Val>=270 && X_Val<=400) {
+					X_Val = X_Val-Const;
+				}
+			}
+			
+		}
+	}
+	public void RefreshLv2() {		
+		c.removeAll();
+		PhysicsLv2();
+		
+		herol2.setIcon(plr);
+		herol2.setBounds(Y_Val, X_Val, 100, 120);
+		c.add(herol2);
+		
+		
+		
+		ImageIcon bc = new ImageIcon("level2.png");
+		JLabel mm = new JLabel();
+		mm.setBounds(0, 0, 1300, 700);
+		mm.setIcon(bc);
+		mm.setVisible(true);
+		c.add(mm);
+		repaint();
+	}
+	public void Level1() {
+			
+			levelselect = 1;
+			pressing = false;
+			enemy1killed = false;
+			enemy2killed = false;
+			enemy3killed = false;
+			enemy4killed = false;
+			enemy5killed = false;
+			d1 = false;
+			d2 = false;
+			d3 = false;
+			life = 3;
+			score = 0;
+			time = 180;
+			X_Val = 20;
+			Y_Val = 0;
+			c.removeAll();
+			time = 180;
+			time2 = 99999;
+			timerstartstop(1);
+			player.setIcon(plr);
+			player.setBounds(Y_Val, X_Val, 100, 120);
+			c.add(player);
+			timelabel.setText("NULL");
+			timelabel.setBounds(1200, 104, 200, 100);
+			timelabel.setFont(tm);
+			timelabel.setVisible(true);
+			c.add(timelabel);
+			lifelabel.setText(""+life);
+			lifelabel.setBounds(1230, 213, 200, 100);
+			lifelabel.setFont(lf);
+			c.add(lifelabel);
+			
+			/*time2 = 9999;
+			
+			Timer t2 = new Timer(200, new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					time2--;
+					RefreshLv1Timer();
+				}
+			});
+			t2.start();
+			
+			Timer t = new Timer(1000, new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					time--;
+					RefreshLv1Timer();
+					
+					if(time>=0)
+						timelabel.setText(""+(time / 60)+":"+(time % 60));
+				}
+			});
+			t.start();*/
+			
+			ImageIcon bc = new ImageIcon("level1.png");
+			JLabel mm = new JLabel();
+			mm.setBounds(0, 0, 1300, 700);
+			mm.setIcon(bc);
+			mm.setVisible(true);
+			c.add(mm);
+			repaint();
+			
+			RefreshLv1();		
 	}
 	
 	public void keyTyped(KeyEvent e) {
@@ -373,7 +618,12 @@ public class Main extends JFrame implements KeyListener{
 			System.out.println("Q = "+key);
 		}
 		System.out.println("Y = "+Y_Val+"-----X = "+X_Val);
-		RefreshLv1();
+		if(levelselect==1) {
+			RefreshLv1();
+		}
+		else if(levelselect==2) {
+			RefreshLv2();
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -382,13 +632,49 @@ public class Main extends JFrame implements KeyListener{
 		if(keycode == KeyEvent.VK_Q) {
 			key = 5;
 			pressing = false;
-			RefreshLv1();
+			if(levelselect==1) {
+				RefreshLv1();
+			}
+			else if(levelselect==2) {
+				RefreshLv2();
+			}
 		}
 	}
 	
 	public void CallLv1Win() {
 		c.removeAll();
+		
+		timerstartstop(0);
+		
+		levelselect = -1;
+		
+		if(highscore<score) {
+			writeHighScore();
+		}
+		
 		System.out.println(""+score);
+		
+		JButton quit = new JButton();
+		quit.setFocusable(false);
+		quit.setBounds(280, 540, 200, 60);
+		quit.setText("QUIT");
+		quit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainMenu();
+			}
+		});	
+		c.add(quit);
+		
+		JButton next = new JButton();
+		next.setFocusable(false);
+		next.setBounds(740, 540, 200, 60);
+		next.setText("NEXT");
+		next.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				levelselect = 2;
+			}
+		});	
+		c.add(next);
 		
 		JLabel lifebonus = new JLabel();
 		lifebonus.setText(""+life+"x1000 = "+(life*1000));
@@ -698,8 +984,33 @@ public class Main extends JFrame implements KeyListener{
 				}
 			}
 		}
-		
 
+		if(d1==true) {
+			dimond1got.setText("1");
+		}
+		else {
+			dimond1got.setText("0");
+		}
+		if(d2==true) {
+			dimond2got.setText("1");
+		}
+		else {
+			dimond2got.setText("0");
+		}
+		if(d3==true) {
+			dimond3got.setText("1");
+		}
+		else {
+			dimond3got.setText("0");
+		}
+		
+		dimond1got.setFont(lf);
+		dimond2got.setFont(lf);
+		dimond3got.setFont(lf);
+		dimond3got.setBounds(1235, 365, 50, 50);
+		dimond2got.setBounds(1235, 485, 50, 50);
+		dimond1got.setBounds(1235, 605, 50, 50);
+		
 		scc.setBounds(1160, 55, 300, 70);
 		scc.setFont(scf);
 		
@@ -797,6 +1108,9 @@ public class Main extends JFrame implements KeyListener{
 			X_Val = 20;
 		}
 		
+		c.add(dimond1got);
+		c.add(dimond2got);
+		c.add(dimond3got);
 		c.add(enemy5);
 		c.add(enemy4);
 		c.add(enemy3);
