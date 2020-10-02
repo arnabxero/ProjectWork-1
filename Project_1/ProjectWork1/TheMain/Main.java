@@ -56,7 +56,10 @@ public class Main extends JFrame implements KeyListener{
 	boolean d1 = false, d2 = false, d3 = false;
 	
 	///////////////////////Level2stuff/////////////////////////////////
-	boolean en1k = false, en2k = false, en3k = false, en4k = false;
+	int timel2 = 180;
+	int time2l2 = 99999;
+	int scorelv2 = 0;
+	boolean e1k = false, e2k = false, e3k = false, e4k = false;
 	boolean dm1 = false, dm2 = false, dm3 = false;
 	
 	JLabel en1l2 = new JLabel();
@@ -173,14 +176,7 @@ public class Main extends JFrame implements KeyListener{
 		
 		MainMenu();
 		
-		Timer t2 = new Timer(200, new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				time2--;
-				RefreshLv1Timer();
-			}
-		});
-		t2.start();
+		
 	}
 	
 	public void MainMenu() {
@@ -276,6 +272,18 @@ public class Main extends JFrame implements KeyListener{
 			t.stop();
 		}
 		else t.start();
+		
+		Timer t2 = new Timer(200, new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				time2--;
+				RefreshLv1Timer();
+			}
+		});
+		if(n==0) {
+			t2.stop();
+		}
+		else t2.start();
 	}
 	
 	public void CallContinue() {
@@ -367,15 +375,45 @@ public class Main extends JFrame implements KeyListener{
 		c.add(mm);
 		repaint();
 	}
+	public void TimerLv2(int n) {
+
+		Timer tl2 = new Timer(1000, new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				timel2--;
+				RefreshLv1Timer();
+				
+				if(timel2>=0)
+					timelabel.setText(""+(timel2 / 60)+":"+(timel2 % 60));
+			}
+		});
+		if(n==0) {
+			tl2.stop();
+		}
+		else tl2.start();
+		
+		
+		Timer t2l2 = new Timer(200, new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				time2l2--;
+				RefreshLv2Timer();
+			}
+		});
+		if(n==0) {
+			t2l2.stop();
+		}
+		else t2l2.start();
+	}
 	public void Level2() {
 		c.removeAll();
 		
 		levelselect = 2;
 		pressing = false;
-		en1k = false;
-		en2k = false;
-		en3k = false;
-		en4k = false;
+		e1k = false;
+		e2k = false;
+		e3k = false;
+		e4k = false;
 		dm1 = false;
 		dm2 = false;
 		dm3 = false;
@@ -385,6 +423,21 @@ public class Main extends JFrame implements KeyListener{
 		//time2 = 99999;
 		life = 3;
 		score = 0;
+		scorelv2 = 0;
+		scc.setText("0000");
+		lifelabel.setText(""+life);
+		lifelabel.setBounds(1230, 213, 200, 100);
+		lifelabel.setFont(lf);
+		c.add(lifelabel);
+		
+		
+		timelabel.setText("NULL");
+		timelabel.setBounds(1200, 104, 200, 100);
+		timelabel.setFont(tm);
+		timelabel.setVisible(true);
+		c.add(timelabel);
+		
+		TimerLv2(1);
 		
 		ImageIcon bc = new ImageIcon("level2.png");
 		JLabel mm = new JLabel();
@@ -394,6 +447,200 @@ public class Main extends JFrame implements KeyListener{
 		c.add(mm);
 		repaint();
 		
+	}
+	public void CallLv2Win() {
+		c.removeAll();
+		
+		TimerLv2(0);
+		
+		levelselect = -1;
+		
+		if(highscore<scorelv2) {
+			writeHighScore();
+		}
+		
+		System.out.println(""+scorelv2);
+		
+		JButton quit = new JButton();
+		quit.setFocusable(false);
+		quit.setBounds(280, 540, 200, 60);
+		quit.setText("QUIT");
+		quit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainMenu();
+			}
+		});	
+		c.add(quit);
+		
+		JButton next = new JButton();
+		next.setFocusable(false);
+		next.setBounds(740, 540, 200, 60);
+		next.setText("NEXT");
+		next.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				levelselect = 3;
+				Level2();
+			}
+		});	
+		c.add(next);
+		
+		JLabel lifebonus = new JLabel();
+		lifebonus.setText(""+life+"x1000 = "+(life*1000));
+		lifebonus.setBounds(630, 225, 400, 100);
+		lifebonus.setFont(scf);
+		c.add(lifebonus);
+		
+		JLabel enemyscore = new JLabel();
+		enemyscore.setBounds(630, 345, 400, 100);
+		enemyscore.setText("4x1000 = 4000");
+		enemyscore.setFont(scf);
+		c.add(enemyscore);
+		
+		JLabel dscore = new JLabel();
+		dscore.setBounds(630, 290, 400, 100);
+		dscore.setText(""+((scorelv2-5000)/1000)+"x1000 = "+((scorelv2-4000)));
+		dscore.setFont(scf);
+		c.add(dscore);
+		
+		int scorel = (life*1000)+scorelv2;
+		JLabel scorelabel = new JLabel();
+		scorelabel.setBounds(630, 410, 400, 100);
+		scorelabel.setText("                 "+scorel);
+		scorelabel.setFont(scf);
+		c.add(scorelabel);
+		
+		ImageIcon bc = new ImageIcon("winlv1.png");
+		JLabel mm = new JLabel();
+		mm.setBounds(0, 0, 1300, 700);
+		mm.setIcon(bc);
+		mm.setVisible(true);
+		c.add(mm);
+		
+		repaint();	
+	}
+	
+	public void SetPlayerClimblv2() {
+		if(time2l2%2==0) {
+			player.setIcon(plrc1);
+		}
+		else {
+			player.setIcon(plrc2);
+		}
+	}
+	
+	public void SetPlayerWalklv2() {
+		if(time2l2%2==0) {
+			if(side==1) {
+				player.setIcon(plr);
+			}
+			else {
+				player.setIcon(plr2);
+			}
+		}
+		else {
+			if(side==1) {
+				player.setIcon(plrwr);
+			}
+			else {
+				player.setIcon(plrwl);
+			}
+		}
+	}
+	public void RefreshLv2Timer() {
+		
+		if(time2l2%2==0) {
+			dm1l2.setIcon(greenr);
+			dm2l2.setIcon(red);
+			dm3l2.setIcon(bluer);
+			
+			/*en1l2.setBounds(280, 150, 120, 120);
+			en2l2.setBounds(300, 527, 120, 120);
+			en3l2.setBounds(750, 45, 120, 120);
+			en4l2.setBounds(710, 527, 120, 120);*/
+			
+			if(e1k==false) {
+				if(Y_Val>=220 && Y_Val<=345 && X_Val>=135 && X_Val<225) {
+					en1l2.setBounds(240, 150, 120, 120);
+					en1l2.setIcon(enemy1al);
+				}
+				else {
+					en1l2.setIcon(enemyr);
+				}
+			}
+			else {
+				en1l2.setIcon(enemy1fk);
+			}
+			if(e2k==false) {
+				if(Y_Val>=240 && Y_Val<=360 && X_Val>=490 && X_Val<540) {
+					en2l2.setBounds(260, 527, 120, 120);
+					en2l2.setIcon(enemy1al);
+				}
+				else {
+					en2l2.setIcon(enemyr);
+				}
+			}
+			else {
+				en2l2.setIcon(enemy1fk);
+			}
+			if(e3k==false) {
+				if(Y_Val>=680 && Y_Val<=775 && X_Val>=30 && X_Val<=110) {
+					en3l2.setBounds(710, 45, 120, 120);
+					en3l2.setIcon(enemy1al);
+				}
+				else {
+					en3l2.setIcon(enemyr);
+				}
+			}
+			else {
+				en3l2.setIcon(enemy1fk);
+			}
+			if(e4k==false) {
+				if(Y_Val>=645 && Y_Val<=775 && X_Val>=505 && X_Val<540) {
+					en4l2.setBounds(670, 527, 120, 120);
+					en4l2.setIcon(enemy1al);
+				}
+				else {
+					en4l2.setIcon(enemyr);
+				}
+			}
+			else {
+				en4l2.setIcon(enemy1fk);
+			}
+		}
+		///////////////////////////////////
+		else {
+			dm1l2.setIcon(green);
+			dm2l2.setIcon(redr);
+			dm3l2.setIcon(blue);
+			if(e1k==false) {
+				en1l2.setBounds(280, 150, 120, 120);
+				en1l2.setIcon(enemy);
+			}
+			else {
+				en1l2.setIcon(enemy1fk);
+			}
+			if(e2k==false) {
+				en2l2.setBounds(300, 527, 120, 120);
+				en2l2.setIcon(enemy);
+			}
+			else {
+				en2l2.setIcon(enemy1fk);
+			}
+			if(e3k==false) {
+				en3l2.setBounds(750, 45, 120, 120);
+				en3l2.setIcon(enemy);
+			}
+			else {
+				en3l2.setIcon(enemy1fk);
+			}
+			if(e4k==false) {
+				en4l2.setBounds(710, 527, 120, 120);
+				en4l2.setIcon(enemy);
+			}
+			else {
+				en4l2.setIcon(enemy1fk);
+			}	
+		}
 	}
 	public void PhysicsLv2() {
 		if(key==1) {
@@ -495,11 +742,191 @@ public class Main extends JFrame implements KeyListener{
 		c.removeAll();
 		PhysicsLv2();
 		
-		herol2.setIcon(plr);
-		herol2.setBounds(Y_Val, X_Val, 100, 120);
-		c.add(herol2);
+		if(dm1==true && dm2==true && dm3==true && life>=0 && timel2>=0 && X_Val>=200 && X_Val<=265 && Y_Val>=990 && Y_Val<=1030) {
+			CallLv2Win();
+		}
+		player.setIcon(plr);
+		player.setBounds(Y_Val, X_Val, 100, 120);
+	
+		if(Y_Val>=220 && Y_Val<=345 && X_Val>=135 && X_Val<225 && e1k==false && pressing==true) {
+			scorelv2 = scorelv2+1000;
+			e1k = true;
+		}
+		if(Y_Val>230 && Y_Val<335 && X_Val>=135 && X_Val<225 && e1k==false && pressing==false) {
+			life = life-1;
+			X_Val = 20;
+			Y_Val = 0;
+		}
 		
+		if(Y_Val>=240 && Y_Val<=360 && X_Val>=490 && X_Val<540 && e2k==false && pressing==true) {
+			scorelv2 = scorelv2+1000;
+			e2k = true;
+		}
+		if(Y_Val>=250 && Y_Val<=350 && X_Val>=490 && X_Val<540 && e2k==false && pressing==false) {
+			life = life-1;
+			X_Val = 20;
+			Y_Val = 0;
+		}
 		
+		if(Y_Val>=680 && Y_Val<=775 && X_Val>=30 && X_Val<=110 && e3k==false && pressing==true) {
+			scorelv2 = scorelv2+1000;
+			e3k = true;
+		}
+		if(Y_Val>=690 && Y_Val<=785 && X_Val>=30 && X_Val<=110 && e3k==false && pressing==false) {
+			life = life-1;
+			X_Val = 20;
+			Y_Val = 0;
+		}
+		
+		if(Y_Val>=645 && Y_Val<=775 && X_Val>=505 && X_Val<540 && e4k==false && pressing==true) {
+			scorelv2 = scorelv2+1000;
+			e4k = true;
+		}
+		if(Y_Val>=655 && Y_Val<=765  && X_Val>=505 && X_Val<540 && e4k==false && pressing==false) {
+			life = life-1;
+			X_Val = 20;
+			Y_Val = 0;
+		}
+		
+		if(key<5) {
+			if(side==0) {
+				if((X_Val>=80 && X_Val<=85 && Y_Val>=0 && Y_Val<=90) || (Y_Val>=280 && Y_Val<=375 && X_Val>=145 && X_Val<=150) || (Y_Val>=135 && Y_Val<=820 && X_Val>=525 && X_Val<=530) || (Y_Val>=710 && Y_Val<=845 && X_Val>=40 && X_Val<=45) || (Y_Val>=890 && Y_Val<=1020 && X_Val>=260 && X_Val<=265)) {
+					SetPlayerWalklv2();
+				}
+				else {
+					SetPlayerClimblv2();
+				}
+			}
+			else if(side==1) {
+				if((X_Val>=80 && X_Val<=85 && Y_Val>=0 && Y_Val<=90) || (Y_Val>=280 && Y_Val<=375 && X_Val>=145 && X_Val<=150) || (Y_Val>=135 && Y_Val<=820 && X_Val>=525 && X_Val<=530) || (Y_Val>=710 && Y_Val<=845 && X_Val>=40 && X_Val<=45) || (Y_Val>=890 && Y_Val<=1020 && X_Val>=260 && X_Val<=265)) {
+					SetPlayerWalklv2();
+				}
+				else {
+					SetPlayerClimblv2();
+				}
+			}
+		}
+		else if(key==5) {
+			if(side==0) {
+				if(pressing==true) {
+					if((X_Val>=80 && X_Val<=85 && Y_Val>=0 && Y_Val<=90) || (Y_Val>=280 && Y_Val<=375 && X_Val>=145 && X_Val<=150) || (Y_Val>=135 && Y_Val<=820 && X_Val>=525 && X_Val<=530) || (Y_Val>=710 && Y_Val<=845 && X_Val>=40 && X_Val<=45) || (Y_Val>=890 && Y_Val<=1020 && X_Val>=260 && X_Val<=265)) {
+						player.setIcon(plrlp);
+					}
+					else {
+						player.setIcon(plrcla);
+					}
+				}
+				else if(pressing==false) {
+					if((X_Val>=80 && X_Val<=85 && Y_Val>=0 && Y_Val<=90) || (Y_Val>=280 && Y_Val<=375 && X_Val>=145 && X_Val<=150) || (Y_Val>=135 && Y_Val<=820 && X_Val>=525 && X_Val<=530) || (Y_Val>=710 && Y_Val<=845 && X_Val>=40 && X_Val<=45) || (Y_Val>=890 && Y_Val<=1020 && X_Val>=260 && X_Val<=265)) {
+						SetPlayerWalklv2();
+					}
+					else {
+						SetPlayerClimblv2();
+					}
+				}
+			}
+			else if(side==1) {
+				if(pressing==true) {
+					if((X_Val>=80 && X_Val<=85 && Y_Val>=0 && Y_Val<=90) || (Y_Val>=280 && Y_Val<=375 && X_Val>=145 && X_Val<=150) || (Y_Val>=135 && Y_Val<=820 && X_Val>=525 && X_Val<=530) || (Y_Val>=710 && Y_Val<=845 && X_Val>=40 && X_Val<=45) || (Y_Val>=890 && Y_Val<=1020 && X_Val>=260 && X_Val<=265)) {
+						player.setIcon(plrrp);
+					}
+					else {
+						player.setIcon(plrcra);
+					}
+				}
+				else if(pressing==false) {
+					if((X_Val>=80 && X_Val<=85 && Y_Val>=0 && Y_Val<=90) || (Y_Val>=280 && Y_Val<=375 && X_Val>=145 && X_Val<=150) || (Y_Val>=135 && Y_Val<=820 && X_Val>=525 && X_Val<=530) || (Y_Val>=710 && Y_Val<=845 && X_Val>=40 && X_Val<=45) || (Y_Val>=890 && Y_Val<=1020 && X_Val>=260 && X_Val<=265)) {
+						SetPlayerWalklv2();
+					}
+					else {
+						SetPlayerClimblv2();
+					}
+				}
+			}
+		}			
+		
+		c.add(player);
+		
+		en1l2.setBounds(280, 150, 120, 120);
+		en2l2.setBounds(300, 527, 120, 120);
+		en3l2.setBounds(750, 45, 120, 120);
+		en4l2.setBounds(710, 527, 120, 120);
+		dm1l2.setBounds(365, 170, 120, 120);
+		dm2l2.setBounds(800, 545, 120, 120);
+		dm3l2.setBounds(900, 280, 120, 120);
+		if(dm1==true) {
+			dimond1got.setText("1");
+		}
+		else {
+			dimond1got.setText("0");
+		}
+		if(dm2==true) {
+			dimond2got.setText("1");
+		}
+		else {
+			dimond2got.setText("0");
+		}
+		if(dm3==true) {
+			dimond3got.setText("1");
+		}
+		else {
+			dimond3got.setText("0");
+		}
+		
+		dimond1got.setFont(lf);
+		dimond2got.setFont(lf);
+		dimond3got.setFont(lf);
+		dimond3got.setBounds(1235, 365, 50, 50);
+		dimond2got.setBounds(1235, 485, 50, 50);
+		dimond1got.setBounds(1235, 605, 50, 50);
+		
+		if(Y_Val>=325  && Y_Val<=380  && X_Val>=130  && X_Val<=155 && dm1==false) {
+			scorelv2 = scorelv2+1000;
+			dm1 = true;
+		}
+		if(Y_Val>=755  && Y_Val<=825  && X_Val>=500  && X_Val<=540 && dm2==false) {
+			scorelv2 = scorelv2+1000;
+			dm2 = true;
+		}
+		if(Y_Val>=890  && Y_Val<=950  && X_Val>=215  && X_Val<=270 && dm3==false) {
+			scorelv2 = scorelv2+1000;
+			dm3 = true;
+		}
+		if(dm1==false) {
+			c.add(dm1l2);
+		}
+		else {
+			c.remove(dm1l2);
+		}
+		if(dm2==false) {
+			c.add(dm2l2);
+		}
+		else {
+			c.remove(dm2l2);
+		}
+		if(dm3==false) {
+			c.add(dm3l2);
+		}
+		else {
+			c.remove(dm3l2);
+		}
+		
+		scc.setBounds(1160, 55, 300, 70);
+		scc.setFont(scf);
+		scc.setText(""+scorelv2);
+		
+		lifelabel.setText(""+life);
+		
+		c.add(lifelabel);		
+		c.add(scc);
+		c.add(dimond1got);
+		c.add(dimond2got);
+		c.add(dimond3got);
+		c.add(en1l2);
+		c.add(en2l2);
+		c.add(en3l2);
+		c.add(en4l2);
+		c.add(timelabel);
 		
 		ImageIcon bc = new ImageIcon("level2.png");
 		JLabel mm = new JLabel();
@@ -672,6 +1099,7 @@ public class Main extends JFrame implements KeyListener{
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				levelselect = 2;
+				Level2();
 			}
 		});	
 		c.add(next);
