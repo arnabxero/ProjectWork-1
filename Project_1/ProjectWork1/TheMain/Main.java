@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -24,7 +25,9 @@ import java.io.PrintStream;
 import javax.swing.*;
 import javax.swing.Timer;
 
-
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Main extends JFrame implements KeyListener{
 
@@ -262,6 +265,118 @@ public class Main extends JFrame implements KeyListener{
 		
 		repaint();
 	}
+	
+	public void EnemyMusic() {
+		
+		/////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////
+		String snd = "enemymusic.wav";
+		
+		try 
+		{
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch(Exception ex) {
+			System.out.println("Error with playing sound.");
+			ex.printStackTrace( );
+		}   
+		
+		
+		//////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////
+	}
+	
+public void DimondMusic() {
+		
+		/////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////
+		String snd = "dimondmusic.wav";
+		
+		try 
+		{
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch(Exception ex) {
+			System.out.println("Error with playing sound.");
+			ex.printStackTrace( );
+		}   
+		
+		
+		//////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////
+	}
+
+public void DeathMusic() {
+	
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	String snd = "death.wav";
+	
+	try 
+	{
+		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioInputStream);
+		clip.start();
+	} catch(Exception ex) {
+		System.out.println("Error with playing sound.");
+		ex.printStackTrace( );
+	}   
+	
+	
+	//////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+}
+
+public void WinMusic() {
+	
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	String snd = "winmusic.wav";
+	
+	try 
+	{
+		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioInputStream);
+		clip.start();
+	} catch(Exception ex) {
+		System.out.println("Error with playing sound.");
+		ex.printStackTrace( );
+	}   
+	
+	
+	//////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+}
+
+public void LostMusic() {
+	
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	String snd = "lose.wav";
+	
+	try 
+	{
+		AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioInputStream);
+		clip.start();
+	} catch(Exception ex) {
+		System.out.println("Error with playing sound.");
+		ex.printStackTrace( );
+	}   
+	
+	
+	//////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+}
+
+
 	public void timerstartstop(int n) {
 		
 		Timer t = new Timer(1000, new ActionListener() {
@@ -456,6 +571,23 @@ public class Main extends JFrame implements KeyListener{
 	public void Level2() {
 		c.removeAll();
 		
+		///////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////
+		String snd = "level2music.wav";
+		
+		try 
+		{
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch(Exception ex) {
+			System.out.println("Error with playing sound.");
+			ex.printStackTrace( );
+		}   
+		
+		/////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////
 		levelselect = 2;
 		pressing = false;
 		e1k = false;
@@ -498,6 +630,8 @@ public class Main extends JFrame implements KeyListener{
 	}
 	public void CallLv2Failed() {
 		c.removeAll();
+		
+		LostMusic();
 		
 		TimerLv2(0);
 		
@@ -574,6 +708,8 @@ public class Main extends JFrame implements KeyListener{
 	}
 	public void CallLv2Win() {
 		c.removeAll();
+		
+		WinMusic();
 		
 		TimerLv2(0);
 		
@@ -895,30 +1031,36 @@ public class Main extends JFrame implements KeyListener{
 		//////////////////////////////////////////////////////////////////////////
 		
 		if(Y_Val>=105 && Y_Val<=215 && X_Val>=70 && X_Val<95 && es1k==false && pressing==true) {
+			EnemyMusic();
 			scorelv2 = scorelv2+1000;
 			es1k = true;
 		}
 		if(Y_Val>115 && Y_Val<210 && X_Val>=0 && X_Val<120 && es1k==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			X_Val = 20;
 			Y_Val = 0;
 		}
 		
 		if(Y_Val>=420 && Y_Val<=540 && X_Val>510 && X_Val<=600 && es2k==false && pressing==true) {
+			EnemyMusic();
 			scorelv2 = scorelv2+1000;
 			es2k = true;
 		}
 		if(Y_Val>435 && Y_Val<535 && X_Val>=470 && X_Val<600 && es2k==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			X_Val = 20;
 			Y_Val = 0;
 		}
 		
 		if(Y_Val>=870 && Y_Val<=1030 && X_Val>=0 && X_Val<=60 && es3k==false && pressing==true) {
+			EnemyMusic();
 			scorelv2 = scorelv2+1000;
 			es3k = true;
 		}
 		if(Y_Val>875 && Y_Val<1030 && X_Val>=0 && X_Val<60 && es3k==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			X_Val = 20;
 			Y_Val = 0;
@@ -955,40 +1097,48 @@ public class Main extends JFrame implements KeyListener{
 		///////////////////////////////////////////////////////////////////////////////////
 	
 		if(Y_Val>=220 && Y_Val<=345 && X_Val>=135 && X_Val<225 && e1k==false && pressing==true) {
+			EnemyMusic();
 			scorelv2 = scorelv2+1000;
 			e1k = true;
 		}
 		if(Y_Val>230 && Y_Val<335 && X_Val>=135 && X_Val<225 && e1k==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			X_Val = 20;
 			Y_Val = 0;
 		}
 		
 		if(Y_Val>=240 && Y_Val<=360 && X_Val>=490 && X_Val<540 && e2k==false && pressing==true) {
+			EnemyMusic();
 			scorelv2 = scorelv2+1000;
 			e2k = true;
 		}
 		if(Y_Val>=250 && Y_Val<=350 && X_Val>=490 && X_Val<540 && e2k==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			X_Val = 20;
 			Y_Val = 0;
 		}
 		
 		if(Y_Val>=680 && Y_Val<=775 && X_Val>=30 && X_Val<=110 && e3k==false && pressing==true) {
+			EnemyMusic();
 			scorelv2 = scorelv2+1000;
 			e3k = true;
 		}
 		if(Y_Val>=690 && Y_Val<=785 && X_Val>=30 && X_Val<=110 && e3k==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			X_Val = 20;
 			Y_Val = 0;
 		}
 		
 		if(Y_Val>=645 && Y_Val<=775 && X_Val>=505 && X_Val<540 && e4k==false && pressing==true) {
+			EnemyMusic();
 			scorelv2 = scorelv2+1000;
 			e4k = true;
 		}
 		if(Y_Val>=655 && Y_Val<=765  && X_Val>=505 && X_Val<540 && e4k==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			X_Val = 20;
 			Y_Val = 0;
@@ -1087,14 +1237,17 @@ public class Main extends JFrame implements KeyListener{
 		dimond1got.setBounds(1235, 605, 50, 50);
 		
 		if(Y_Val>=325  && Y_Val<=380  && X_Val>=130  && X_Val<=155 && dm1==false) {
+			DimondMusic();
 			scorelv2 = scorelv2+1000;
 			dm1 = true;
 		}
 		if(Y_Val>=755  && Y_Val<=825  && X_Val>=500  && X_Val<=540 && dm2==false) {
+			DimondMusic();
 			scorelv2 = scorelv2+1000;
 			dm2 = true;
 		}
 		if(Y_Val>=890  && Y_Val<=950  && X_Val>=215  && X_Val<=270 && dm3==false) {
+			DimondMusic();
 			scorelv2 = scorelv2+1000;
 			dm3 = true;
 		}
@@ -1143,7 +1296,25 @@ public class Main extends JFrame implements KeyListener{
 		repaint();
 	}
 	public void Level1() {
+			c.removeAll();
+			//////////////////////////////////////////////////////////////////////
+			///////////////////////////////////////////////////////////////////////
 			
+				String snd = "level1music.wav";
+				
+				try 
+				{
+					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+					Clip clip = AudioSystem.getClip();
+					clip.open(audioInputStream);
+					clip.start();
+				} catch(Exception ex) {
+					System.out.println("Error with playing sound.");
+					ex.printStackTrace( );
+				}   
+			
+			//////////////////////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////////////////////
 			levelselect = 1;
 			pressing = false;
 			enemy1killed = false;
@@ -1159,7 +1330,7 @@ public class Main extends JFrame implements KeyListener{
 			time = 180;
 			X_Val = 20;
 			Y_Val = 0;
-			c.removeAll();
+			
 			time = 180;
 			time2 = 99999;
 			timerstartstop(1);
@@ -1249,6 +1420,25 @@ public class Main extends JFrame implements KeyListener{
 			key = 5;
 			pressing = true;
 			System.out.println("Q = "+key);
+			
+			/////////////////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////////////////
+			String snd = "punchmusic.wav";
+			
+			try 
+			{
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+			} catch(Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace( );
+			}   
+			
+			
+			//////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////
 		}
 		System.out.println("Y = "+Y_Val+"-----X = "+X_Val);
 		if(levelselect==1) {
@@ -1277,6 +1467,8 @@ public class Main extends JFrame implements KeyListener{
 	public void CallLv1Failed() {
 		c.removeAll();
 		
+		LostMusic();
+
 		TimerLv2(0);
 		
 		levelselect = -1;
@@ -1353,6 +1545,8 @@ public class Main extends JFrame implements KeyListener{
 	public void CallLv1Win() {
 		c.removeAll();
 		
+		WinMusic();
+
 		timerstartstop(0);
 		
 		levelselect = -1;
@@ -1738,14 +1932,17 @@ public class Main extends JFrame implements KeyListener{
 		diamond3.setBounds(530, 550, 120, 120);
 		
 		if(Y_Val>975 && Y_Val<=1025 && X_Val>110 && X_Val<=160 && d1==false) {
+			DimondMusic();
 			d1 = true;
 			score = score+1000;
 		}
 		if(Y_Val<280 && Y_Val>175 && X_Val>245 && X_Val<275 && d2==false) {
+			DimondMusic();
 			d2 = true;
 			score = score+1000;
 		}
 		if(Y_Val>485 && Y_Val<590 && X_Val>490 && X_Val<600 && d3==false) {
+			DimondMusic();
 			d3 = true;
 			score = score+1000;
 		}
@@ -1761,12 +1958,14 @@ public class Main extends JFrame implements KeyListener{
 		player.setBounds(Y_Val, X_Val, 100, 120);
 		
 		if(Y_Val>=410 && enemy1killed==false && pressing==true) {
+			EnemyMusic();
 			enemy1killed = true;
 			score = score+1000;
 			scc.setText(""+score);
 		}
 		
 		if(Y_Val>420 && enemy1killed==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			lifelabel.setText(""+life);
 			Y_Val = 5;
@@ -1774,12 +1973,14 @@ public class Main extends JFrame implements KeyListener{
 		}
 		
 		if(Y_Val>=760 && enemy2killed==false && pressing==true) {
+			EnemyMusic();
 			enemy2.setIcon(enemy2fk);
 			enemy2killed = true;
 			score = score+1000;
 			scc.setText(""+score);
 		}
 		if(Y_Val>770 && enemy2killed==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			lifelabel.setText(""+life);
 			Y_Val = 5;
@@ -1788,12 +1989,14 @@ public class Main extends JFrame implements KeyListener{
 		
 		
 		if(Y_Val>420 && Y_Val<460 &&  X_Val>=240 && X_Val<=280 && enemy4killed==false && pressing==false) {
+			DeathMusic();
 			life = life-1;
 			lifelabel.setText(""+life);
 			Y_Val = 5;
 			X_Val = 20;
 		}
 		if(Y_Val>=420 && Y_Val<470 && X_Val>=240 && X_Val<=280 && enemy4killed==false && pressing==true) {
+			EnemyMusic();
 			enemy4.setIcon(enemy2fk);
 			enemy4killed = true;
 			score = score+1000;
@@ -1801,11 +2004,13 @@ public class Main extends JFrame implements KeyListener{
 		}	
 		
 		if(enemy3killed==false && Y_Val>=680 && Y_Val<=790 && X_Val>=240 && X_Val<=280 && pressing==true) {
+			EnemyMusic();
 			enemy3killed = true;
 			score = score+1000;
 			scc.setText(""+score);
 		}
 		if(enemy3killed==false && X_Val>=240 && X_Val<=280 && Y_Val>690 && Y_Val<780) {
+			DeathMusic();
 			life = life-1;
 			lifelabel.setText(""+life);
 			Y_Val = 5;
@@ -1813,11 +2018,13 @@ public class Main extends JFrame implements KeyListener{
 		}
 		
 		if(enemy5killed==false && Y_Val>=90 && Y_Val<190 && X_Val>=460 && X_Val<=540 && pressing==true) {
+			EnemyMusic();
 			enemy5killed = true;
 			score = score+1000;
 			scc.setText(""+score);
 		}
 		if(enemy5killed==false && Y_Val>100 && Y_Val<190 && X_Val>=460 && X_Val<=540) {
+			DeathMusic();
 			life = life-1;
 			lifelabel.setText(""+life);
 			Y_Val = 5;
