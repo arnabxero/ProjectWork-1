@@ -1,13 +1,10 @@
 package TheMain;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -16,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -31,6 +27,10 @@ import javax.sound.sampled.Clip;
 
 public class Main extends JFrame implements KeyListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Container c = new Container();
 	int BoundX = 1316, BoundY = 738;
 	Cursor hand = new Cursor(Cursor.HAND_CURSOR);
@@ -185,7 +185,25 @@ public class Main extends JFrame implements KeyListener{
 		
 		MainMenu();
 		
-		
+//////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+		String snd = "level1music.wav";
+
+		try 
+		{	
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+
+			clip.start();
+		} catch(Exception ex) {
+			System.out.println("Error with playing sound.");
+			ex.printStackTrace( );
+		}   
+
+//////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 	}
 	
 	public void MainMenu() {
@@ -571,23 +589,6 @@ public void LostMusic() {
 	public void Level2() {
 		c.removeAll();
 		
-		///////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////
-		String snd = "level2music.wav";
-		
-		try 
-		{
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.start();
-		} catch(Exception ex) {
-			System.out.println("Error with playing sound.");
-			ex.printStackTrace( );
-		}   
-		
-		/////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////
 		levelselect = 2;
 		pressing = false;
 		e1k = false;
@@ -690,7 +691,6 @@ public void LostMusic() {
 		dscore.setFont(scf);
 		c.add(dscore);
 		
-		int scorel = (life*1000)+scorelv2;
 		JLabel scorelabel = new JLabel();
 		scorelabel.setBounds(630, 410, 400, 100);
 		scorelabel.setText("0000");
@@ -1295,26 +1295,10 @@ public void LostMusic() {
 		c.add(mm);
 		repaint();
 	}
+
 	public void Level1() {
 			c.removeAll();
-			//////////////////////////////////////////////////////////////////////
-			///////////////////////////////////////////////////////////////////////
 			
-				String snd = "level1music.wav";
-				
-				try 
-				{
-					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(snd).getAbsoluteFile());
-					Clip clip = AudioSystem.getClip();
-					clip.open(audioInputStream);
-					clip.start();
-				} catch(Exception ex) {
-					System.out.println("Error with playing sound.");
-					ex.printStackTrace( );
-				}   
-			
-			//////////////////////////////////////////////////////////////////////
-			/////////////////////////////////////////////////////////////////////
 			levelselect = 1;
 			pressing = false;
 			enemy1killed = false;
@@ -1388,7 +1372,7 @@ public void LostMusic() {
 
 		int keycode = e.getKeyCode();
 		
-		if(keycode == KeyEvent.VK_A) {
+		if(keycode == KeyEvent.VK_A || keycode == KeyEvent.VK_LEFT) {
 			key = 1;
 			side = 0;
 			
@@ -1396,7 +1380,7 @@ public void LostMusic() {
 				Y_Val =  Y_Val+Const;
 			}	
 		}
-		else if(keycode == KeyEvent.VK_D) {
+		else if(keycode == KeyEvent.VK_D || keycode == KeyEvent.VK_RIGHT) {
 			key = 2;
 			side = 1;
 			
@@ -1404,19 +1388,19 @@ public void LostMusic() {
 				Y_Val = Y_Val-Const;
 			}
 		}
-		else if(keycode == KeyEvent.VK_W) {
+		else if(keycode == KeyEvent.VK_W || keycode == KeyEvent.VK_UP)  {
 			key = 3;
 			if(X_Val<=10) {
 				X_Val = X_Val+Const;
 			}
 		}
-		else if(keycode == KeyEvent.VK_S) {
+		else if(keycode == KeyEvent.VK_S || keycode == KeyEvent.VK_DOWN) {
 			key = 4;
 			if(X_Val>=530) {
 				X_Val = X_Val-Const;
 			}
 		}
-		else if(keycode == KeyEvent.VK_Q) {
+		else if(keycode == KeyEvent.VK_Q || keycode == KeyEvent.VK_SPACE) {
 			key = 5;
 			pressing = true;
 			System.out.println("Q = "+key);
@@ -1452,7 +1436,7 @@ public void LostMusic() {
 	public void keyReleased(KeyEvent e) {
 		int keycode = e.getKeyCode();
 		
-		if(keycode == KeyEvent.VK_Q) {
+		if(keycode == KeyEvent.VK_Q || keycode == KeyEvent.VK_SPACE) {
 			key = 5;
 			pressing = false;
 			if(levelselect==1) {
@@ -1526,7 +1510,6 @@ public void LostMusic() {
 		dscore.setFont(scf);
 		c.add(dscore);
 		
-		int scorel = (life*1000)+scorelv2;
 		JLabel scorelabel = new JLabel();
 		scorelabel.setBounds(630, 410, 400, 100);
 		scorelabel.setText("0000");
@@ -1558,6 +1541,7 @@ public void LostMusic() {
 		System.out.println(""+score);
 		
 		JLabel hscore = new JLabel();
+		System.out.println("New High Score Written = "+highscore);
 		hscore.setText(""+highscore);
 		hscore.setBounds(1050, 110, 120, 120);
 		hscore.setFont(scf);
@@ -2056,7 +2040,7 @@ public void LostMusic() {
 	}
 	
 	public static void main(String[] args) {
-		Main frm = new Main();
+		new Main();
 		
 		System.out.print("Hello World");
 	}	
